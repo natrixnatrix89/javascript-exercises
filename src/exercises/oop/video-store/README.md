@@ -38,3 +38,8 @@ Summary of design specs:
     - its title,
     - the average rating,
     - and whether it is checked out or on the shelves.
+
+## Setting up/Running
+Run `npm install` in the `javascript-exercises` directory to install dependencies.
+
+Run `node index.js` inside directory `video-store` to run the app.
