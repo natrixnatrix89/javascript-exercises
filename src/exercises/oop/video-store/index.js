@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
+const { Video, VideoStore, User } = require("./videostore");
 
-const moviesInStore = [{ name: "Godfather", rating: 5 }];
+const store = new VideoStore();
 
 async function rentVideo() {
   const { choices, name } = await inquirer.prompt([
@@ -13,10 +14,13 @@ async function rentVideo() {
       name: 'choices',
       type: 'checkbox',
       message: 'Which ones do you want?',
-      choices: moviesInStore.map(movie => ({ name: movie.name, value: movie }))
+      choices: store.asChoices
     }
   ]);
+
+  store.rentMovies(choices);
   console.log(`Oh, ${name}. ${choices.map(c => c.name).join(", ")} is a good choice.`);
+  console.log(`movies: ${store.printContent}`);
 }
 
 async function returnVideo() {
@@ -40,10 +44,12 @@ async function fillVideoStore() {
   while (addMore) {
     const { movieName, movieRating, more } = await inquirer.prompt([
       { type: 'input', name: 'movieName', message: 'Enter movie name' },
-      { type: 'number', name: 'movieRating', message: 'Enter movie rating' },
+      { type: 'input', name: 'movieRating', message: 'Enter movie rating' },
       { type: 'confirm', name: 'more', message: 'Would you like to add more?' }
     ]);
     addMore = more;
+    store.addMovie(movieName, movieRating);
+    console.log(`Thanks, here's a list of movies: ${store.printContent}`);
   }
 }
 
